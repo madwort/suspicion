@@ -3,7 +3,7 @@ import hypothesis.strategies as st
 from hypothesis import assume, settings
 import pytest
 
-from calculator.nodes import Add, Subtract, Divide, Value, NaryExpr, BinaryExpr
+from calculator.nodes import Add, Multiply, Subtract, Divide, Value, NaryExpr, BinaryExpr
 from calculator.calculator1 import calculate as c1
 from calculator.calculator2 import calculate as c2
 
@@ -29,9 +29,13 @@ class CalculatorMachine(RuleBasedStateMachine):
 
     @rule(
         value=st.integers(min_value=20, max_value=29),
+        add=st.booleans(),
     )
-    def add_an_addition_node(self, value):
-        self.expr = Add([self.expr,Value(value)])
+    def add_a_nary_node(self, value, add):
+        if add:
+            self.expr = Add([self.expr,Value(value)])
+        else:
+            self.expr = Multiply([self.expr,Value(value)])
 
     @precondition(lambda self: isinstance(self.expr, NaryExpr))
     @rule()
@@ -44,9 +48,13 @@ class CalculatorMachine(RuleBasedStateMachine):
 
     @rule(
         value=st.integers(min_value=30, max_value=39),
+        divide=st.booleans(),
     )
-    def add_a_divide_node_head(self, value):
-        self.expr = (Divide(self.expr,Value(value)))
+    def add_a_binary_node(self, value, divide):
+        if divide:
+            self.expr = (Divide(self.expr,Value(value)))
+        else:
+            self.expr = (Subtract(self.expr,Value(value)))
 
     @precondition(lambda self: isinstance(self.expr, BinaryExpr))
     @rule()
