@@ -8,6 +8,8 @@ build==1.1.1
     # via pip-tools
 click==8.1.7
     # via pip-tools
+hypothesis==6.102.4
+    # via -r requirements.in
 iniconfig==2.0.0
     # via pytest
 packaging==24.0
