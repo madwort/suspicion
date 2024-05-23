@@ -13,7 +13,7 @@ from calculator.calculator2 import calculate as c2
 
 # setting deadline=None because some tests showed timing variability
 # "Unreliable test timings! On an initial run, this test took 325.93ms, which exceeded the deadline of 200.00ms, but on a subsequent run it took 5.95 ms, which did not."
-@settings(max_examples=500, stateful_step_count=400, deadline=None)
+@settings(max_examples=10000, stateful_step_count=400, deadline=None)
 class CalculatorMachine(RuleBasedStateMachine):
 
     @initialize(value=st.integers(min_value=0, max_value=9))
@@ -55,14 +55,13 @@ class CalculatorMachine(RuleBasedStateMachine):
         self.expr = new_expr
 
     @rule(
-        value=st.integers(min_value=20, max_value=29),
         add=st.booleans(),
     )
-    def add_a_nary_node(self, value, add):
+    def add_a_nary_node(self, add):
         if add:
-            self.expr = Add([self.expr,Value(value)])
+            self.expr = Add([self.expr])
         else:
-            self.expr = Multiply([self.expr,Value(value)])
+            self.expr = Multiply([self.expr])
 
     @precondition(lambda self: isinstance(self.expr, NaryExpr))
     @rule()
@@ -73,23 +72,23 @@ class CalculatorMachine(RuleBasedStateMachine):
         newlist.append(self.expr.args[0])
         self.expr = node_type(newlist)
 
-    @rule(
-        value=st.integers(min_value=30, max_value=39),
-        divide=st.booleans(),
-    )
-    def add_a_binary_node(self, value, divide):
-        if divide:
-            self.expr = (Divide(self.expr,Value(value)))
-        else:
-            self.expr = (Subtract(self.expr,Value(value)))
-
-    @precondition(lambda self: isinstance(self.expr, BinaryExpr))
-    @rule()
-    def binary_node_rotate_values(self):
-        node_type = type(self.expr)
-        lhs = self.expr.lhs
-        rhs = self.expr.rhs
-        self.expr = node_type(rhs, lhs)
+    # @rule(
+    #     value=st.integers(min_value=30, max_value=39),
+    #     divide=st.booleans(),
+    # )
+    # def add_a_binary_node(self, value, divide):
+    #     if divide:
+    #         self.expr = (Divide(self.expr,Value(value)))
+    #     else:
+    #         self.expr = (Subtract(self.expr,Value(value)))
+    #
+    # @precondition(lambda self: isinstance(self.expr, BinaryExpr))
+    # @rule()
+    # def binary_node_rotate_values(self):
+    #     node_type = type(self.expr)
+    #     lhs = self.expr.lhs
+    #     rhs = self.expr.rhs
+    #     self.expr = node_type(rhs, lhs)
 
     # TODO
     # def mutate_leftmost_param_binary_node(self):

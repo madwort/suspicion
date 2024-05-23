@@ -37,10 +37,10 @@ def buildstr_subtract(expr):
 
 @buildstr.register(nodes.Divide)
 def buildstr_divide(expr):
-    return f"{buildstr(expr.lhs)} / {buildstr(expr.rhs)}"
+    # return f"{buildstr(expr.lhs)} / {buildstr(expr.rhs)}"
 
-    # # correct version
-    # return f"({buildstr(expr.lhs)} / {buildstr(expr.rhs)})"
+    # correct version
+    return f"({buildstr(expr.lhs)} / {buildstr(expr.rhs)})"
 
 
 def parenthesise(s):
