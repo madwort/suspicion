@@ -16,19 +16,19 @@ from calculator.calculator2 import calculate as c2
 @settings(max_examples=5000, deadline=None)
 class CalculatorMachine(RuleBasedStateMachine):
 
-    @initialize(value=st.integers(min_value=1, max_value=10))
+    @initialize(value=st.integers(min_value=0, max_value=9))
     def create_root_node(self, value):
         self.expr = Value(value)
 
     @precondition(lambda self: isinstance(self.expr, NaryExpr))
     @rule(
-        value=st.integers(min_value=1, max_value=10),
+        value=st.integers(min_value=10, max_value=19),
     )
     def add_value_to_an_nary_node(self, value):
         self.expr.args.append(Value(value))
 
     @rule(
-        value=st.integers(min_value=1, max_value=10),
+        value=st.integers(min_value=20, max_value=29),
     )
     def add_an_addition_node(self, value):
         self.expr = Add([self.expr,Value(value)])
@@ -42,8 +42,8 @@ class CalculatorMachine(RuleBasedStateMachine):
         self.expr = Add(newlist)
 
     @rule(
-        value=st.integers(min_value=1, max_value=10),
         lhs=st.booleans(),
+        value=st.integers(min_value=30, max_value=39),
     )
     def add_a_divide_node_head(self, value, lhs):
         if lhs:
