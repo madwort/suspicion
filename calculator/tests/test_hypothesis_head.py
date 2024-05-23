@@ -35,32 +35,26 @@ class CalculatorMachine(RuleBasedStateMachine):
 
     @precondition(lambda self: isinstance(self.expr, NaryExpr))
     @rule()
-    def addition_node_rotate_values(self):
+    def nary_node_rotate_values(self):
+        node_type = type(self.expr)
         before = self.expr
         newlist = self.expr.args[1:]
         newlist.append(self.expr.args[0])
-        self.expr = Add(newlist)
+        self.expr = node_type(newlist)
 
     @rule(
-        lhs=st.booleans(),
         value=st.integers(min_value=30, max_value=39),
     )
-    def add_a_divide_node_head(self, value, lhs):
-        if lhs:
-            self.expr = (Divide(self.expr,Value(value)))
-        else:
-            self.expr = (Divide(Value(value),self.expr))
+    def add_a_divide_node_head(self, value):
+        self.expr = (Divide(self.expr,Value(value)))
 
-    # @precondition(lambda self: isinstance(self.expr, BinaryExpr))
-    # @rule(
-    #     value=st.integers(min_value=1, max_value=10),
-    #     lhs=st.booleans(),
-    # )
-    # def modify_a_divide_node_head(self, value, lhs):
-    #     if lhs:
-    #         self.expr = (Divide(self.expr.lhs,Value(value)))
-    #     else:
-    #         self.expr = (Divide(Value(value),self.expr.rhs))
+    @precondition(lambda self: isinstance(self.expr, BinaryExpr))
+    @rule()
+    def binary_node_rotate_values(self):
+        node_type = type(self.expr)
+        lhs = self.expr.lhs
+        rhs = self.expr.rhs
+        self.expr = node_type(rhs, lhs)
 
     @invariant()
     def compare_results(self):
