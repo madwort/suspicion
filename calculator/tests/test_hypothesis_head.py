@@ -25,9 +25,19 @@ class CalculatorMachine(RuleBasedStateMachine):
     def add_value_to_an_nary_node(self, value):
         self.expr.args.append(Value(value))
 
+    @rule(
+        value=st.integers(min_value=1, max_value=10),
+    )
+    def add_an_addition_node(self, value):
+        self.expr = Add([self.expr,Value(value)])
+
+    @precondition(lambda self: isinstance(self.expr, NaryExpr))
     @rule()
-    def add_an_addition_node(self):
-        self.expr = Add([self.expr,Value(1)])
+    def addition_node_rotate_values(self):
+        before = self.expr
+        newlist = self.expr.args[1:]
+        newlist.append(self.expr.args[0])
+        self.expr = Add(newlist)
 
     @rule(
         value=st.integers(min_value=1, max_value=10),
