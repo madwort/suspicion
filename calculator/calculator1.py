@@ -23,6 +23,17 @@ def visit_value(expr):
 
 @visit.register(nodes.Add)
 def visit_add(expr):
+    # this is found
+    if isinstance(expr.args[0], nodes.Add):
+        if isinstance(expr.args[0].args[0], nodes.Add):
+            if isinstance(expr.args[0].args[0].args[0], nodes.Add):
+                raise Exception("Four Adds in a row are verboten plz!")
+
+    # this is only found by test_hypothesis_head tests
+    # if isinstance(expr.args[0], nodes.Add):
+    #     if isinstance(expr.args[0].args[0], nodes.Divide):
+    #         if isinstance(expr.args[0].args[0].rhs, nodes.Add):
+    #             raise Exception("No nesting combo Add-Add-Div-Add plz!")
     return reduce(operator.add, (visit(arg) for arg in expr.args))
 
 

@@ -39,6 +39,9 @@ def buildstr_subtract(expr):
 def buildstr_divide(expr):
     return f"{buildstr(expr.lhs)} / {buildstr(expr.rhs)}"
 
+    # # correct version
+    # return f"({buildstr(expr.lhs)} / {buildstr(expr.rhs)})"
+
 
 def parenthesise(s):
     return f"({s})"
