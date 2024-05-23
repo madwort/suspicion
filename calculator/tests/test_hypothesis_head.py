@@ -11,7 +11,9 @@ from calculator.calculator2 import calculate as c2
 # this means we can use isinstance(self.expr) as a precondition
 # I think this means that hypothesis will redraw, rather than bailing (as with assume())
 
-@settings(max_examples=5000)
+# setting deadline=None because some tests showed timing variability
+# "Unreliable test timings! On an initial run, this test took 325.93ms, which exceeded the deadline of 200.00ms, but on a subsequent run it took 5.95 ms, which did not."
+@settings(max_examples=5000, deadline=None)
 class CalculatorMachine(RuleBasedStateMachine):
 
     @initialize(value=st.integers(min_value=1, max_value=10))
