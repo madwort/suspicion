@@ -27,13 +27,23 @@ def visit_add(expr):
     if isinstance(expr.args[0], nodes.Add):
         if isinstance(expr.args[0].args[0], nodes.Add):
             if isinstance(expr.args[0].args[0].args[0], nodes.Add):
-                raise Exception("Four Adds in a row are verboten plz!")
+                raise Exception("Four Adds in a row are verboten plz!", expr)
 
     # this is only found by test_hypothesis_head tests
-    # if isinstance(expr.args[0], nodes.Add):
-    #     if isinstance(expr.args[0].args[0], nodes.Divide):
-    #         if isinstance(expr.args[0].args[0].rhs, nodes.Add):
-    #             raise Exception("No nesting combo Add-Add-Div-Add plz!")
+    if isinstance(expr.args[0], nodes.Add):
+        if isinstance(expr.args[0].args[0], nodes.Divide):
+            if isinstance(expr.args[0].args[0].rhs, nodes.Add):
+                raise Exception("No nesting combo Add-Add-Div-Add plz!", expr)
+
+    # harder version
+    # hypothesis only finds this if it doesn't find the others
+    if len(expr.args) > 5 and isinstance(expr.args[1], nodes.Add):
+        raise Exception("Moar args plz!", expr)
+
+    # this test requires rotating the Add arguments
+    if isinstance(expr.args[1], nodes.Add):
+        raise Exception("Rotate your owl plz!", expr)
+
     return reduce(operator.add, (visit(arg) for arg in expr.args))
 
 
