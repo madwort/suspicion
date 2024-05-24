@@ -48,12 +48,12 @@ def visit_multiply(expr):
     # if len(expr.args) > 5 and isinstance(expr.args[1], nodes.Multiply):
     #     raise Exception("Moar args plz!", expr)
 
-    # even harder version
-    # this is findable with some rules commented out, add_a_nary_node limited to 
-    # multiply & max_examples=5000, stateful_step_count=400
-    # (e.g. 2863 passing examples, 3 failing examples, 565 invalid examples)
-    if len(expr.args) > 4 and isinstance(expr.args[1], nodes.Multiply) and isinstance(expr.args[2], nodes.Divide) and isinstance(expr.args[3], nodes.Add):
-        raise Exception("OMG can you even make this bro!", expr)
+    # # even harder version
+    # # this is findable with some rules commented out, add_a_nary_node limited to
+    # # multiply & max_examples=5000, stateful_step_count=400
+    # # (e.g. 2863 passing examples, 3 failing examples, 565 invalid examples)
+    # if len(expr.args) > 4 and isinstance(expr.args[1], nodes.Multiply) and isinstance(expr.args[2], nodes.Divide) and isinstance(expr.args[3], nodes.Add):
+    #     raise Exception("OMG can you even make this bro!", expr)
 
     return reduce(operator.mul, (visit(arg) for arg in expr.args))
 
@@ -65,4 +65,59 @@ def visit_subtract(expr):
 
 @visit.register(nodes.Divide)
 def visit_divide(expr):
+    # if isinstance(expr.lhs, nodes.Value) and isinstance(expr.rhs, nodes.Value):
+    #     raise Exception("One divide", expr)
+
+    # if isinstance(expr.lhs, nodes.Divide) and isinstance(expr.rhs, nodes.Divide):
+    #     raise Exception("Three divides", expr)
+
+    # # Finds this in 2sec
+    # if isinstance(expr.lhs, nodes.Divide) and isinstance(expr.lhs.lhs, nodes.Divide):
+    #     raise Exception("Three other divides", expr)
+
+    # # Should also be posible - finds in 4sec
+    # if isinstance(expr.lhs, nodes.Divide) and isinstance(expr.lhs.lhs, nodes.Divide) and isinstance(expr.rhs, nodes.Divide):
+    #     raise Exception("Four divides", expr)
+
+    # # finds in 3sec
+    # if isinstance(expr.lhs, nodes.Divide) and isinstance(expr.lhs.lhs, nodes.Divide) and isinstance(expr.rhs, nodes.Divide) and isinstance(expr.rhs.lhs, nodes.Divide):
+    #     raise Exception("Five divides", expr)
+
+    # # finds in 8sec
+    # if isinstance(expr.lhs, nodes.Divide) and isinstance(expr.lhs.lhs, nodes.Divide) and isinstance(expr.rhs, nodes.Divide) and isinstance(expr.rhs.lhs, nodes.Divide) and isinstance(expr.rhs.rhs, nodes.Divide):
+    #     raise Exception("Six divides", expr)
+
+
+    # # found in 32sec with mirror or with flip first non-full node
+    # if (
+    #     isinstance(expr.lhs, nodes.Divide) and
+    #     isinstance(expr.lhs.lhs, nodes.Divide) and
+    #     isinstance(expr.lhs.rhs, nodes.Divide) and
+    #     isinstance(expr.rhs, nodes.Divide) and
+    #     isinstance(expr.rhs.lhs, nodes.Divide) and
+    #     isinstance(expr.rhs.rhs, nodes.Divide)
+    # ):
+    #     raise Exception("Seven divides", expr)
+
+    # yeah, erm, couldn't find in 20mins with mirror
+    # can we find this with flip_first_non_full_lhs()?
+    if (
+        isinstance(expr.lhs, nodes.Divide) and
+        isinstance(expr.lhs.lhs, nodes.Divide) and
+        isinstance(expr.lhs.rhs, nodes.Divide) and
+        isinstance(expr.lhs.lhs.lhs, nodes.Divide) and
+        isinstance(expr.lhs.lhs.rhs, nodes.Divide) and
+        isinstance(expr.lhs.rhs.lhs, nodes.Divide) and
+        isinstance(expr.lhs.rhs.rhs, nodes.Divide) and
+        isinstance(expr.rhs, nodes.Divide) and
+        isinstance(expr.rhs.lhs, nodes.Divide) and
+        isinstance(expr.rhs.rhs, nodes.Divide) and
+        isinstance(expr.rhs.lhs.lhs, nodes.Divide) and
+        isinstance(expr.rhs.lhs.rhs, nodes.Divide) and
+        isinstance(expr.rhs.rhs.lhs, nodes.Divide) and
+        isinstance(expr.rhs.rhs.rhs, nodes.Divide)
+    ):
+        raise Exception("Fifteen divides", expr)
+
+
     return visit(expr.lhs) / visit(expr.rhs)
