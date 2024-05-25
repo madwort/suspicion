@@ -15,7 +15,7 @@ from calculator.calculator2 import calculate as c2
 # "Unreliable test timings! On an initial run, this test took 325.93ms, which exceeded the deadline of 200.00ms, but on a subsequent run it took 5.95 ms, which did not."
 @settings(
     max_examples=10000,
-    stateful_step_count=200,
+    stateful_step_count=40,
     deadline=None,
     # verbosity=Verbosity.debug
 )

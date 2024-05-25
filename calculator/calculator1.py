@@ -88,6 +88,13 @@ def visit_divide(expr):
     #     raise Exception("Three divides", expr)
 
     # found in 32sec with mirror or with flip first non-full node
+    # example reproduction is 12 steps
+    # sample runtimes in one particular configuration:
+    # max examples 10k steps 400 examples 45 - 1min25s (46/38s)
+    # max examples 10k steps 200 examples 80 - 1min5s (31/34s)
+    # max examples 10k steps 100 examples 100 - 1min2s (17/45s)
+    # max examples 10k steps 30 examples 592 - 1min6s (31/35s)
+    # max examples 10k steps 20 examples 762 - 45s (25/20s)
     if (
         isinstance(expr.lhs, nodes.Divide) and
         isinstance(expr.lhs.lhs, nodes.Divide) and
