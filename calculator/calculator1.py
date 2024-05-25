@@ -23,21 +23,40 @@ def visit_value(expr):
 
 @visit.register(nodes.Add)
 def visit_add(expr):
-    # # this is found
-    # if isinstance(expr.args[0], nodes.Add):
-    #     if isinstance(expr.args[0].args[0], nodes.Add):
-    #         if isinstance(expr.args[0].args[0].args[0], nodes.Add):
-    #             raise Exception("Four Adds in a row are verboten plz!", expr)
+    # this is found
+    # if (
+    #     isinstance(expr.args[0], nodes.Add)
+    #     and isinstance(expr.args[0].args[0], nodes.Add)
+    #     and isinstance(expr.args[0].args[0].args[0], nodes.Add)
+    # ):
+    #     raise Exception("Four Adds in a row are verboten plz!", expr)
 
-    # # this is only found by test_hypothesis_head tests
-    # if isinstance(expr.args[0], nodes.Add):
-    #     if isinstance(expr.args[0].args[0], nodes.Divide):
-    #         if isinstance(expr.args[0].args[0].rhs, nodes.Add):
-    #             raise Exception("No nesting combo Add-Add-Div-Add plz!", expr)
+    # this is found
+    # if (
+    #     isinstance(expr.args[0], nodes.Add)
+    #     and isinstance(expr.args[0].args[0], nodes.Divide)
+    #     and isinstance(expr.args[0].args[0].rhs, nodes.Add)
+    # ):
+    #     raise Exception("No nesting combo Add-Add-Div-Add plz!", expr)
 
     # this test requires rotating the Add arguments
     # if len(expr.args) > 1 and isinstance(expr.args[1], nodes.Add):
     #     raise Exception("Rotate your owl plz!", expr)
+
+    # I think finding this requires nary_node_rotate_values_bottom_left()
+    if (
+        isinstance(expr.args[0], nodes.Add)
+        and len(expr.args) > 1
+        and isinstance(expr.args[1], nodes.Add)
+        and len(expr.args[0].args) > 1
+        and isinstance(expr.args[0].args[0], nodes.Add)
+        and isinstance(expr.args[0].args[1], nodes.Add)
+        and len(expr.args[1].args) > 1
+        and isinstance(expr.args[1].args[0], nodes.Add)
+        and isinstance(expr.args[1].args[1], nodes.Add)
+    ):
+        raise Exception("Seven Adds sitting in a tree plz!", expr)
+
 
     return reduce(operator.add, (visit(arg) for arg in expr.args))
 
