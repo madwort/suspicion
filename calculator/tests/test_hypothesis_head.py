@@ -46,7 +46,7 @@ class CalculatorMachine(RuleBasedStateMachine):
     def add_value_to_an_nary_node(self, value):
         self.expr.args.append(Value(value))
 
-    def walk_to_bottom_left_expr(expr):
+    def walk_to_bottom_left_expr(self):
         current_node = self.expr
         previous_node = self.expr
         while not isinstance(current_node, Value):
@@ -65,7 +65,7 @@ class CalculatorMachine(RuleBasedStateMachine):
         value=st.integers(min_value=60, max_value=69),
     )
     def add_a_nary_node_bottom_left(self, value):
-        current_node, previous_node = self.walk_to_bottom_left_expr(self.expr)
+        current_node, previous_node = self.walk_to_bottom_left_expr()
 
         new_node = Add([current_node, Value(value)])
 
@@ -128,7 +128,7 @@ class CalculatorMachine(RuleBasedStateMachine):
         value=st.integers(min_value=50, max_value=59),
     )
     def add_a_binary_node_bottom_left(self, value):
-        current_node, previous_node = self.walk_to_bottom_left_expr(self.expr)
+        current_node, previous_node = self.walk_to_bottom_left_expr()
 
         new_node = Divide(current_node, Value(value))
 
