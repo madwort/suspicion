@@ -25,7 +25,7 @@ class CalculatorMachine(RuleBasedStateMachine):
     def create_root_node(self, value):
         # select which types of Nodes to investigate
         self.enable_nary = True
-        self.enable_binary = True
+        self.enable_binary = False
 
         # start with a value
         self.expr = Value(value)
@@ -65,7 +65,7 @@ class CalculatorMachine(RuleBasedStateMachine):
         value=st.integers(min_value=60, max_value=69),
     )
     def add_a_nary_node_bottom_left(self, value):
-        current_node, previous_node = walk_to_bottom_left_expr(self.expr)
+        current_node, previous_node = self.walk_to_bottom_left_expr(self.expr)
 
         new_node = Add([current_node, Value(value)])
 
@@ -128,7 +128,7 @@ class CalculatorMachine(RuleBasedStateMachine):
         value=st.integers(min_value=50, max_value=59),
     )
     def add_a_binary_node_bottom_left(self, value):
-        current_node, previous_node = walk_to_bottom_left_expr(self.expr)
+        current_node, previous_node = self.walk_to_bottom_left_expr(self.expr)
 
         new_node = Divide(current_node, Value(value))
 
