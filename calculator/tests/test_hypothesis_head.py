@@ -24,8 +24,8 @@ class CalculatorMachine(RuleBasedStateMachine):
     @initialize(value=st.integers(min_value=0, max_value=9))
     def create_root_node(self, value):
         # select which types of Nodes to investigate
-        self.enable_binary = True
         self.enable_nary = True
+        self.enable_binary = True
 
         # start with a value
         self.expr = Value(value)
