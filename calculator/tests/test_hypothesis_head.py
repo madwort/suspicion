@@ -214,8 +214,9 @@ class CalculatorMachine(RuleBasedStateMachine):
             elif isinstance(node, BinaryExpr):
                 return root_type(_reflect_a_node(node.rhs), _reflect_a_node(node.lhs))
             elif isinstance(node, NaryExpr):
-                # TODO: because we can rotate the arguments to an Nary, maybe
-                # we don't need to reflect the args?
+                # reverse the list in place because we can, but we also need to be able
+                # to rotate the bottom left NaryExpr
+                node.args.reverse()
                 return root_type(node.args)
             else:
                 assert False
