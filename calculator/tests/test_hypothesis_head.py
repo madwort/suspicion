@@ -98,6 +98,40 @@ class CalculatorMachine(RuleBasedStateMachine):
         self.expr = node_type(newlist)
 
 
+    @precondition(lambda self: self.enable_nary)
+    @precondition(lambda self: not isinstance(self.expr, Value))
+    @rule()
+    def nary_node_rotate_values_bottom_left(self):
+        current_node = self.expr
+        previous_node = self.expr
+        previous_previous_node = self.expr
+        while not isinstance(current_node, Value):
+            previous_previous_node = previous_node
+            previous_node = current_node
+            if isinstance(current_node, BinaryExpr):
+                current_node = current_node.lhs
+            elif isinstance(current_node, NaryExpr):
+                current_node = current_node.args[0]
+            else:
+                assert False
+
+        # could make this a precondition, but ok to make a no-op for now
+        # & hope that hypothesis will shrink it away?
+        if not isinstance(previous_node, NaryExpr):
+            return
+
+        node_type = type(previous_node)
+        before = previous_node
+        newlist = previous_node.args[1:]
+        newlist.append(previous_node.args[0])
+
+        if isinstance(previous_previous_node, NaryExpr):
+            previous_previous_node.args[0] = node_type(newlist)
+        elif isinstance(previous_previous_node, BinaryExpr):
+            previous_previous_node.lhs = node_type(newlist)
+        else:
+            assert False
+
     # ---Binary section---
 
     @precondition(lambda self: self.enable_binary)
