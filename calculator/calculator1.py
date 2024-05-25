@@ -32,12 +32,12 @@ def visit_add(expr):
     #     raise Exception("Four Adds in a row are verboten plz!", expr)
 
     # this is found
-    # if (
-    #     isinstance(expr.args[0], nodes.Add)
-    #     and isinstance(expr.args[0].args[0], nodes.Divide)
-    #     and isinstance(expr.args[0].args[0].rhs, nodes.Add)
-    # ):
-    #     raise Exception("No nesting combo Add-Add-Div-Add plz!", expr)
+    if (
+        isinstance(expr.args[0], nodes.Add)
+        and isinstance(expr.args[0].args[0], nodes.Divide)
+        and isinstance(expr.args[0].args[0].rhs, nodes.Add)
+    ):
+        raise Exception("No nesting combo Add-Add-Div-Add plz!", expr)
 
     # this test requires rotating the Add arguments
     # if len(expr.args) > 1 and isinstance(expr.args[1], nodes.Add):
@@ -95,15 +95,15 @@ def visit_divide(expr):
     # max examples 10k steps 100 examples 100 - 1min2s (17/45s)
     # max examples 10k steps 30 examples 592 - 1min6s (31/35s)
     # max examples 10k steps 20 examples 762 - 45s (25/20s)
-    if (
-        isinstance(expr.lhs, nodes.Divide) and
-        isinstance(expr.lhs.lhs, nodes.Divide) and
-        isinstance(expr.lhs.rhs, nodes.Divide) and
-        isinstance(expr.rhs, nodes.Divide) and
-        isinstance(expr.rhs.lhs, nodes.Divide) and
-        isinstance(expr.rhs.rhs, nodes.Divide)
-    ):
-        raise Exception("Seven divides", expr)
+    # if (
+    #     isinstance(expr.lhs, nodes.Divide) and
+    #     isinstance(expr.lhs.lhs, nodes.Divide) and
+    #     isinstance(expr.lhs.rhs, nodes.Divide) and
+    #     isinstance(expr.rhs, nodes.Divide) and
+    #     isinstance(expr.rhs.lhs, nodes.Divide) and
+    #     isinstance(expr.rhs.rhs, nodes.Divide)
+    # ):
+    #     raise Exception("Seven divides", expr)
 
     # # definitely findable with flip & reflect
     # if (

@@ -25,7 +25,7 @@ class CalculatorMachine(RuleBasedStateMachine):
     def create_root_node(self, value):
         # select which types of Nodes to investigate
         self.enable_nary = True
-        self.enable_binary = False
+        self.enable_binary = True
 
         # start with a value
         self.expr = Value(value)
@@ -137,11 +137,11 @@ class CalculatorMachine(RuleBasedStateMachine):
     @precondition(lambda self: self.enable_binary)
     @rule(
         value=st.integers(min_value=30, max_value=39),
-        # divide=st.booleans(),
+        divide=st.booleans(),
     )
-    # def add_a_binary_node_head(self, value, divide):
-    def add_a_binary_node_head(self, value):
-        divide = True
+    def add_a_binary_node_head(self, value, divide):
+    # def add_a_binary_node_head(self, value):
+        # divide = True
         if divide:
             self.expr = (Divide(self.expr,Value(value)))
         else:
