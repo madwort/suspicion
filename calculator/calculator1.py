@@ -36,8 +36,8 @@ def visit_add(expr):
     #             raise Exception("No nesting combo Add-Add-Div-Add plz!", expr)
 
     # this test requires rotating the Add arguments
-    if len(expr.args) > 1 and isinstance(expr.args[1], nodes.Add):
-        raise Exception("Rotate your owl plz!", expr)
+    # if len(expr.args) > 1 and isinstance(expr.args[1], nodes.Add):
+    #     raise Exception("Rotate your owl plz!", expr)
 
     return reduce(operator.add, (visit(arg) for arg in expr.args))
 
