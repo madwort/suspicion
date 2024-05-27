@@ -13,7 +13,7 @@ def calculate(expr):
 
 @singledispatch
 def visit(expr):
-    assert False, f"Unhandled expression type: {type(expr)}"
+    assert False, f"Unhandled expression type: {type(expr)}, {expr}"
 
 
 @visit.register(nodes.Value)
